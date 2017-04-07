@@ -1,22 +1,16 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                docker.image('maven:3.3.3-jdk-8').inside {
-                    sh 'ls -al'
-                }
+node {
+    stage("Main Build") {
+        checkout scm
+        docker.image("maven:3.3-jdk-7").inside {
+            stage("Build") {
+                sh "mvn clean compile"
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
+            stage("Test") {
+                sh "mvn clean test"
+                sh "mvn clean verify"
             }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+            stage("Package") {
+                sh "mvn clean package"
             }
         }
     }
