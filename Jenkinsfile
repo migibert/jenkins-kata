@@ -1,6 +1,4 @@
 node {
-    stage("Main Build") {
-        checkout scm
         docker.image("maven:3.3-jdk-7").inside {
             stage("Build") {
                 sh "mvn clean compile"
@@ -14,7 +12,7 @@ node {
             }
             stage("Publish") {
                 sh "ls -al target/*"
+                junit 'target/surefire-reports/TEST-*.xml'
             }
         }
-    }
 }
