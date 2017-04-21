@@ -1,0 +1,14 @@
+version: '2'
+services:
+  api:
+    image: openjdk:8
+    command: java -jar /code/target/jenkins-kata-1.0-SNAPSHOT.jar
+    volumes:
+      - .:/code
+  perf:
+    image: "denvazh/gatling"
+    command: -s  KataSimulation
+    volumes:
+      - ./src/perf-tests/configuration:/opt/gatling/conf
+      - ./src/perf-tests/user-files:/opt/gatling/user-files
+      - ./target:/opt/gatling/results
