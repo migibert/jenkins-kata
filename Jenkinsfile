@@ -16,11 +16,6 @@ node {
         stage("Package") {
             sh "mvn package -DskipTests"
         }
-        stage("Publish quality report") {
-            withSonarQubeEnv('sonar') {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
-            }
-        }
     }
 
     stage("Performance tests") {
@@ -36,14 +31,18 @@ node {
                 remainingAttempts--
                 sh "sleep $waitingTime"
             }
-            if(finished) {
-                gatlingArchive()
-            }
         }
         finally {
             sh "sudo chown -R jenkins:jenkins target"
             sh "docker-compose -p $compose_id stop"
             sh "docker-compose -p $compose_id rm -f"
         }
+    }
+
+    stage("Publish reports") {
+        withSonarQubeEnv('sonar') {
+            sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
+        }
+        gatlingArchive()
     }
 }
