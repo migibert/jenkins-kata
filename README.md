@@ -10,10 +10,10 @@
 * Sonar
 * Gatling
 
-## Starting sonarqube server via docker :
+## Starting sonarqube server via docker :
 `docker run -d --name sonarqube -p 10000:10000 -p 9092:9092 -p 11000:9000 sonarqube`
 
-## This project assumes:
+## This project assumes:
 * Sonarqube installation has been registered in Jenkins (because of withSonarqubeEnv usage inside Jenkinsfile)
 * Docker & docker-composed are installed
 
