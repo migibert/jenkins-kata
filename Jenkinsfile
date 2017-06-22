@@ -47,4 +47,12 @@ node('slave') {
             sh "echo This is ${env.BRANCH_NAME} branch"
         }
     }
+    stage("Release image") {
+        if(['master'].contains(env.BRANCH_NAME)) {
+            sh "packer -v"
+            sh "cd provisioning && packer validate instance.json"
+        } else {
+            sh "echo 'Releases are only played against master branch'"
+        }
+    }
 }
