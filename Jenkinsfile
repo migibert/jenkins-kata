@@ -3,8 +3,6 @@ node('slave') {
         checkout scm
     }
 
-    def branch = "${BRANCH_NAME}"
-
     docker.image("maven:3.3-jdk-8").inside {
         stage("Compile") {
             sh "mvn clean compile"
@@ -19,7 +17,7 @@ node('slave') {
     }
 
     stage("Performance tests") {
-        if("master".equals(branch)) {
+        if(["master"].contains(env.BRANCH_NAME)) {
             def compose_id = "${env.JOB_NAME}-${env.BUILD_NUMBER}"
             def finished = false
             def remainingAttempts = 15
@@ -40,20 +38,20 @@ node('slave') {
             }
         } else {
             sh "echo 'No perf tests to play on non master branches'"
-            sh "echo This is $branch branch"
+            sh "echo This is ${env.BRANCH_NAME} branch"
         }
     }
 
     stage("Publish reports") {
-        if("master".equals(branch)) {
+        if(["master"].contains(env.BRANCH_NAME)) {
             withSonarQubeEnv('sonar') {
                 sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
             }
             gatlingArchive()
         } else {
             sh "echo 'No reports to archive on non master branches'"
-            sh "echo This is $branch branch"
-            def toto = "master".equals(branch)
+            sh "echo This is ${env.BRANCH_NAME} branch"
+            def toto = ["master"].contains(env.BRANCH_NAME))
             sh "echo Are master and this branch equals ? $toto"
         }
     }
