@@ -53,6 +53,8 @@ node('slave') {
         } else {
             sh "echo 'No reports to archive on non master branches'"
             sh "echo This is $branch branch"
+            def toto = "master".equals(branch)
+            sh "echo Are master and this branch equals ? $toto"
         }
     }
 }
