@@ -1,0 +1,30 @@
+- name: Create dedicated group
+  group:
+    name: hackaton
+
+- name: Create dedicated user
+  user: 
+    name: hackaton
+    createhome: no
+    group: hackaton
+
+- name: Install java
+  apt:
+    update_cache: yes
+    name: openjdk-8-jdk
+    state: present
+
+- name: Create application directory
+  file:
+    group: hackaton
+    owner: hackaton
+    path: /opt/hackaton
+    mode: 640
+
+- name: Copy application to its directory
+  copy:
+    src: /var/tmp/jenkins-kata-1.0-SNAPSHOT.jar
+    dest: /opt/hackaton
+    owner: hackaton
+    group: hackaton
+    mode: 640

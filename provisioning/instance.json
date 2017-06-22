@@ -7,7 +7,20 @@
       "source_image_project_id": "debian-cloud",
       "zone": "europe-west1-d",
       "image_name": "hackaton-demo",
-      "ssh_username": "packer"
+      "image_family": "hackaton-demo-{{timestamp}}",
+      "ssh_username": "packer",
+      "startup_script_file": "startup.sh"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "../target/jenkins-kata-1.0-SNAPSHOT.jar",
+      "destination": "/var/tmp/jenkins-kata-1.0-SNAPSHOT.jar"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "hackaton.yml"
     }
   ]
 }
