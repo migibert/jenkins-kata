@@ -51,6 +51,7 @@ node('slave') {
         if(['master'].contains(env.BRANCH_NAME)) {
             sh "packer -v"
             sh "cd provisioning && packer validate instance.json"
+            sh "cd provisioning && packer build instance.json"
         } else {
             sh "echo 'Releases are only played against master branch'"
         }
