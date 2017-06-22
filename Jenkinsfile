@@ -32,15 +32,13 @@ node('slave') {
                 }
             }
             finally {
-                sh "sudo chown -R jenkins:jenkins target"
+                sh "sudo chown -R jenkins:build target"
                 sh "docker-compose -p $compose_id stop"
                 sh "docker-compose -p $compose_id rm -f"
             }
         } else {
             sh "echo 'No perf tests to play on non master branches'"
             sh "echo This is ${env.BRANCH_NAME} branch"
-            def toto = ['master'].contains(env.BRANCH_NAME)
-            sh "echo Are master and this branch equals ? $toto"
         }
     }
 
@@ -52,9 +50,7 @@ node('slave') {
             gatlingArchive()
         } else {
             sh "echo 'No reports to archive on non master branches'"
-            sh "echo This is ${env.BRANCH_NAME} branch"
-            def toto = ['master'].contains(env.BRANCH_NAME)
-            sh "echo Are master and this branch equals ? $toto"
+            sh "echo This is ${env.BRANCH_NAME} branch"            
         }
     }
 }
