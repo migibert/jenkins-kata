@@ -17,7 +17,7 @@ node('slave') {
     }
 
     stage("Performance tests") {
-        if(["master"].contains(env.BRANCH_NAME)) {
+        if(['master'].contains(env.BRANCH_NAME)) {
             def compose_id = "${env.JOB_NAME}-${env.BUILD_NUMBER}"
             def finished = false
             def remainingAttempts = 15
@@ -39,11 +39,13 @@ node('slave') {
         } else {
             sh "echo 'No perf tests to play on non master branches'"
             sh "echo This is ${env.BRANCH_NAME} branch"
+            def toto = ['master'].contains(env.BRANCH_NAME)
+            sh "echo Are master and this branch equals ? $toto"
         }
     }
 
     stage("Publish reports") {
-        if(["master"].contains(env.BRANCH_NAME)) {
+        if(['master'].contains(env.BRANCH_NAME)) {
             withSonarQubeEnv('sonar') {
                 sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
             }
@@ -51,7 +53,7 @@ node('slave') {
         } else {
             sh "echo 'No reports to archive on non master branches'"
             sh "echo This is ${env.BRANCH_NAME} branch"
-            def toto = ["master"].contains(env.BRANCH_NAME))
+            def toto = ['master'].contains(env.BRANCH_NAME)
             sh "echo Are master and this branch equals ? $toto"
         }
     }
