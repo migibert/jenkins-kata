@@ -6,7 +6,8 @@
       "source_image_family": "debian-9",
       "source_image_project_id": "debian-cloud",
       "zone": "europe-west1-d",
-      "image-name": "hackaton-demo"
+      "image_name": "hackaton-demo",
+      "ssh_username": "packer"
     }
   ]
 }
