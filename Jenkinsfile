@@ -40,6 +40,7 @@ node('slave') {
             }
         } else {
             sh "echo 'No perf tests to play on non master branches'"
+            sh "echo This is $branch branch"
         }
     }
 
@@ -51,6 +52,7 @@ node('slave') {
             gatlingArchive()
         } else {
             sh "echo 'No reports to archive on non master branches'"
+            sh "echo This is $branch branch"
         }
     }
 }
