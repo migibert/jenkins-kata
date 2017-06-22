@@ -1,6 +1,10 @@
 {
   "provisioners": [
     {
+      "type": "shell",
+      "inline": ["sudo apt-get install -y ansible"]
+    },
+    {
       "type": "file",
       "source": "../target/jenkins-kata-1.0-SNAPSHOT.jar",
       "destination": "/var/tmp/jenkins-kata-1.0-SNAPSHOT.jar"
