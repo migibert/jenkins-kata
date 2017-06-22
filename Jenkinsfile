@@ -38,6 +38,8 @@ node('slave') {
                 sh "docker-compose -p $compose_id stop"
                 sh "docker-compose -p $compose_id rm -f"
             }
+        } else {
+            sh "echo 'No perf tests to play on non master branches'"
         }
     }
 
@@ -47,6 +49,8 @@ node('slave') {
                 sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
             }
             gatlingArchive()
+        } else {
+            sh "echo 'No reports to archive on non master branches'"
         }
     }
 }
