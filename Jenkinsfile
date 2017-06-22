@@ -10,6 +10,11 @@ node('slave') {
         stage("Unit Tests") {
             sh "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test"
             junit 'target/surefire-reports/TEST-*.xml'
+            if(['master'].contains(env.BRANCH_NAME)) {
+                withSonarQubeEnv('sonar') {
+                    sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
+                }
+            }
         }
         stage("Package") {
             sh "mvn package -DskipTests"
@@ -30,6 +35,7 @@ node('slave') {
                     remainingAttempts--
                     sh "sleep $waitingTime"
                 }
+                gatlingArchive()
             }
             finally {
                 sh "sudo chown -R jenkins:build target"
@@ -39,18 +45,6 @@ node('slave') {
         } else {
             sh "echo 'No perf tests to play on non master branches'"
             sh "echo This is ${env.BRANCH_NAME} branch"
-        }
-    }
-
-    stage("Publish reports") {
-        if(['master'].contains(env.BRANCH_NAME)) {
-            withSonarQubeEnv('sonar') {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dsonar.junit.reportsPath=target/surefire-reports'
-            }
-            gatlingArchive()
-        } else {
-            sh "echo 'No reports to archive on non master branches'"
-            sh "echo This is ${env.BRANCH_NAME} branch"            
         }
     }
 }
