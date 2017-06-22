@@ -50,7 +50,7 @@ node('slave') {
             }
             gatlingArchive()
         } else {
-            sh "echo 'No perf reports to archive on non master branches'"
+            sh "echo 'No reports to archive on non master branches'"
         }
     }
 }
