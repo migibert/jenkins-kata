@@ -1,12 +1,7 @@
-- name: Create dedicated group
-  group:
-    name: hackaton
-
 - name: Create dedicated user
-  user: 
+  user:
     name: hackaton
     createhome: no
-    group: hackaton
 
 - name: Install java
   apt:
