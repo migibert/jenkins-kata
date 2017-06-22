@@ -1,3 +1,4 @@
+---
 - name: Create dedicated user
   user:
     name: hackaton
