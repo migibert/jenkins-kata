@@ -20,12 +20,13 @@
         owner: hackaton
         path: /opt/hackaton
         mode: 640
+        state: directory
       become: yes
 
     - name: Copy application to its directory
       copy:
         src: /var/tmp/jenkins-kata-1.0-SNAPSHOT.jar
-        dest: /opt/hackaton
+        dest: /opt/hackaton/jenkins-kata-1.0-SNAPSHOT.jar
         owner: hackaton
         group: hackaton
         mode: 640
